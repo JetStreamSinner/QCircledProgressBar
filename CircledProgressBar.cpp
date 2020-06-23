@@ -29,7 +29,36 @@ void CircledProgressBar::paintEvent(QPaintEvent * event)
 {
     QPainter painter(this);
     renderOuterBar(&painter);
+    renderInnerBar(&painter);
+}
 
+void CircledProgressBar::renderInnerBar(QPainter * painter)
+{
+    painter->save();
+    painter->setBrush(Qt::red);
+    const auto widgetWidth = width();
+    const auto widgetHeight = height();
+
+    const auto middleX = width() / 2;
+    const auto middleY = height() / 2;
+
+    const double outerCircleRadius = sqrt(widgetWidth * widgetWidth + widgetHeight * widgetHeight) / 2;
+    const double innerCircleRadius = outerCircleRadius / 2;
+
+    const int innerRectX = middleX - innerCircleRadius;
+    const int innerRectY = middleY - innerCircleRadius;
+    const int innerRectWidth = outerCircleRadius;
+    const int innerRectHeight = outerCircleRadius;
+
+    QFont font;
+    font.setPixelSize(innerCircleRadius / 2);
+    painter->setFont(font);
+
+    painter->drawEllipse(innerRectX, innerRectY, innerRectWidth, innerRectHeight);
+
+    QString formattedString = QString("%0%").arg(static_cast<double>(_value) / _range * 100);
+    painter->drawText(innerRectX, innerRectY, innerRectWidth, innerRectHeight, Qt::AlignCenter, formattedString);
+    painter->restore();
 }
 
 void CircledProgressBar::renderOuterBar(QPainter * painter)
