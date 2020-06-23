@@ -1,7 +1,10 @@
-#include <iostream>
+#include <QApplication>
+#include "CircledProgressBar.h"
 
-int main()
+int main(int argc, char * argv[])
 {
-    std::cout << "Hello, World!" << std::endl;
-    return 0;
+    QApplication app(argc, argv);
+    CircledProgressBar progressBar;
+    progressBar.show();
+    return app.exec();
 }
