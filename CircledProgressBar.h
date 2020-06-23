@@ -7,6 +7,7 @@
 
 #include <QWidget>
 #include <QPaintEvent>
+#include <QResizeEvent>
 
 
 class CircledProgressBar : public QWidget
@@ -15,7 +16,8 @@ class CircledProgressBar : public QWidget
 public:
     explicit CircledProgressBar(QWidget * parent = nullptr);
 
-    void paintEvent(QPaintEvent * event) override ;
+    void paintEvent(QPaintEvent * event) override;
+    void resizeEvent(QResizeEvent * event) override;
 
     void setMin(int min);
     void setMax(int max);
@@ -29,7 +31,14 @@ private slots:
     void updateProgress();
 
 private:
+
+    QRect _innerRect;
+    double outerCircleRadius;
+    double innerCircleRadius;
+
+    void updateDrawPlaceholders();
     void updateRange();
+
     void renderOuterBar(QPainter * painter);
     void renderInnerBar(QPainter * painter);
 
