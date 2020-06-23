@@ -16,7 +16,33 @@ public:
     explicit CircledProgressBar(QWidget * parent = nullptr);
 
     void paintEvent(QPaintEvent * event) override ;
+
+    void setMin(int min);
+    void setMax(int max);
+    void setRange(int min, int max);
+
+    void setValue(int value);
+    int value() const;
+
+
+private slots:
+    void updateProgress();
+
 private:
+    void updateRange();
+    void renderOuterBar(QPainter * painter);
+    void renderInnerBar(QPainter * painter);
+
+    int _value{};
+
+    int _range{};
+    int _rangeMin{};
+    int _rangeMax{};
+
+    const int fullCircleDegrees = 16 * 360;
+    const int startCountdownAngle = 16 * 90;
+
+    QBrush _pieBrush;
 };
 
 
