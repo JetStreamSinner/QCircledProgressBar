@@ -3,27 +3,15 @@
 //
 
 #include <QPainter>
-#include <QDebug>
 #include <cmath>
-#include <QTimer>
 
 #include "CircledProgressBar.h"
 
 CircledProgressBar::CircledProgressBar(QWidget * parent) : QWidget(parent), _pieBrush(Qt::green)
 {
-    // setFixedSize(400, 400);
 
-    QTimer * timer = new QTimer();
-    connect(timer, SIGNAL(timeout()), this, SLOT(updateProgress()));
-    timer->start(10);
 }
 
-void CircledProgressBar::updateProgress()
-{
-    qDebug() << "Updated";
-    setValue(value() + 1);
-    update();
-}
 
 void CircledProgressBar::resizeEvent(QResizeEvent * event)
 {
@@ -44,7 +32,7 @@ void CircledProgressBar::renderInnerBar(QPainter * painter)
     painter->setBrush(alphaZeroBrush);
 
     QFont font;
-    font.setPixelSize(innerCircleRadius / 2);
+    font.setPixelSize(_innerCircleRadius / 2);
     painter->setFont(font);
 
     painter->drawEllipse(_innerRect);
@@ -91,6 +79,7 @@ void CircledProgressBar::setValue(int value)
         value = _rangeMax;
     else
         _value = value;
+    emit valueChanged(_value);
 }
 
 int CircledProgressBar::value() const
@@ -131,11 +120,11 @@ void CircledProgressBar::updateDrawPlaceholders()
     const auto middleX = width() / 2;
     const auto middleY = height() / 2;
 
-    outerCircleRadius = sqrt(widgetWidth * widgetWidth + widgetHeight * widgetHeight) / 2;
-    innerCircleRadius = outerCircleRadius / 2;
+    _outerCircleRadius = sqrt(widgetWidth * widgetWidth + widgetHeight * widgetHeight) / 2;
+    _innerCircleRadius = _outerCircleRadius / 2;
 
-    _innerRect.setX(middleX - innerCircleRadius);
-    _innerRect.setY(middleY - innerCircleRadius);
-    _innerRect.setWidth(outerCircleRadius);
-    _innerRect.setHeight(outerCircleRadius);
+    _innerRect.setX(middleX - _innerCircleRadius);
+    _innerRect.setY(middleY - _innerCircleRadius);
+    _innerRect.setWidth(_outerCircleRadius);
+    _innerRect.setHeight(_outerCircleRadius);
 }

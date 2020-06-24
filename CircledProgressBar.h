@@ -8,6 +8,8 @@
 #include <QWidget>
 #include <QPaintEvent>
 #include <QResizeEvent>
+#include <QConicalGradient>
+
 
 
 class CircledProgressBar : public QWidget
@@ -25,16 +27,15 @@ public:
 
     void setValue(int value);
     int value() const;
-
-
-private slots:
-    void updateProgress();
+signals:
+    void valueChanged(int value);
 
 private:
 
-    QRect _innerRect;
-    double outerCircleRadius;
-    double innerCircleRadius;
+    QRect _innerRect{};
+    double _outerCircleRadius{};
+    double _innerCircleRadius{};
+
 
     void updateDrawPlaceholders();
     void updateRange();
